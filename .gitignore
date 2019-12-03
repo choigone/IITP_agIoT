@@ -86,7 +86,6 @@ celerybeat-schedule
 .venv
 env/
 venv/
-MQTT_data_store_module/venv/
 ENV/
 env.bak/
 venv.bak/
