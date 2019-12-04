@@ -2,6 +2,8 @@
 #include <zconf.h>
 #include <string>
 #include <ratio>
+#include <iostream>
+#include <fstream>
 
 #include "config.h"
 #include "afsk_avr.h"
@@ -32,7 +34,13 @@ int main(){
 
     // loop
     while(1){
-        string testString = "";
+        string in_line;
+        // text2 경로로 !
+        ifstream in("/Users/gounchoi/Desktop/IITP_agIoT/MQTT_data_store_module/test2.txt");
+        while(getline(in,in_line)){
+        }
+        in.close();
+        string testString = in_line;
         aprs_send(testString);
         next_aprs += APRS_PERIOD * 1000L;
         while (afsk_flush()) {
