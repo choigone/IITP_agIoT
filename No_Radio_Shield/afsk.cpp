@@ -31,7 +31,7 @@
 #include "config.h"
 #include "afsk_avr.h"
 #include "radio_hx1.h"
-#include "Arduino.h"
+#include <Arduino.h>
 #include <stdint.h>
 
 // Module consts

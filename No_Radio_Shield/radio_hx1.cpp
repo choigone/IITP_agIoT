@@ -19,7 +19,7 @@
 #include "radio_hx1.h"
 #include "pin.h"
 #if (ARDUINO + 1) >= 100
-#  include "Arduino.h"
+#  include <Arduino.h>
 #else
 #  include <WProgram.h>
 #endif
