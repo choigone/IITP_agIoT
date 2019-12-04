@@ -19,7 +19,7 @@
 #include "config.h"
 #include "afsk_avr.h"
 #include <stdint.h>
-#include <Arduino.h>
+#include "Arduino.h"
 
 
 // Module constants

@@ -21,7 +21,7 @@
 #include <stdint.h>
 #include <pins_arduino.h>
 #if (ARDUINO + 1) >= 100
-#  include <Arduino.h>
+#  include "Arduino.h"
 #else
 #  include <WProgram.h>
 #endif
