@@ -7,14 +7,15 @@ def func(second = 1.0):
         global end
         if end:
             return
-        # TODO 받은 데이터 저장한 txt 경로로 !
-        f = open("/Users/gounchoi/Desktop/MQTT_data_store_module/test.rtf",'r')
+        f = open("/Users/gounchoi/Desktop/IITP_agIoT/MQTT_data_store_module/test.txt",'r')
         print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-        line = f.readline()
-        # TODO 지금 출력만 하는데 어딘가에 저장하려면 해야함 !
+        line = f.read()
         print(line)
         f.close()
-        f = open("/Users/gounchoi/Desktop/MQTT_data_store_module/test.rtf", 'w')
+        f = open("/Users/gounchoi/Desktop/IITP_agIoT/MQTT_data_store_module/test.txt", 'w')
+        f.close()
+        f = open("/Users/gounchoi/Desktop/IITP_agIoT/MQTT_data_store_module/test2.txt", 'w')
+        f.write(line)
         f.close()
         threading.Timer(second, func, [second]).start()
 
