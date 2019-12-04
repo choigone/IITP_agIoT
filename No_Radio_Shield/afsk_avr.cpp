@@ -16,8 +16,8 @@
  */
 #ifdef AVR
 
-#include <avr/io.h>
-#include <avr/pgmspace.h>
+#include "avr/io.h"
+#include "avr/pgmspace.h"
 #include "config.h"
 #include "afsk_avr.h"
 

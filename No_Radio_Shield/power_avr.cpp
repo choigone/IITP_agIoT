@@ -16,11 +16,11 @@
  */
 #ifdef AVR
 
-#include <avr/power.h>
-#include <avr/interrupt.h>
-#include <avr/sleep.h>
+#include "avr/power.h"
+#include "avr/interrupt.h"
+#include "avr/sleep.h"
 #if (ARDUINO + 1) >= 100
-#  include <Arduino.h>
+#  include "Arduino.h"
 #else
 #  include <WProgram.h>
 #endif

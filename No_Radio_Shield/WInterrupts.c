@@ -25,9 +25,9 @@
 */
 
 #include <inttypes.h>
-#include <avr/io.h>
-#include <avr/interrupt.h>
-#include <avr/pgmspace.h>
+#include "avr/io.h"
+#include "avr/interrupt.h"
+#include "avr/pgmspace.h"
 #include <stdio.h>
 
 #include "wiring_private.h"

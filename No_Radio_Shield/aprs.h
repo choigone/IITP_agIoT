@@ -18,7 +18,7 @@
 #ifndef __APRS_H__
 #define __APRS_H__
 
-#include <Arduino.h>
+#include "Arduino.h"
 void aprs_send(String string);
 
 #endif
