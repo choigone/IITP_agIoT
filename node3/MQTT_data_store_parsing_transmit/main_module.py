@@ -19,11 +19,14 @@ def func(second = 1.0):
         lines = s.splitlines()
         try:
                 datas = lines[-1].split("!")[1]
+                print(datas)
                 ser = serial.Serial('/dev/ttyUSB1', 9600)
                 if datas < 200:
                         ser.write('1')
+                        print("1")
                 else:
                         ser.write('0')
+                        print("0")
         except:
                 print("exceptions")
 
