@@ -8,12 +8,12 @@ def func(second = 1.0):
         global end
         if end:
             return
-        f = open("/Users/gounchoi/Desktop/IITP_agIoT/node3/MQTT_data_store_module/test.txt",'r')
+        f = open("/home/pi/output_mqtt.txt",'r')
         print(datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
         s = f.read()
         print(s)
         f.close()
-        f = open("/Users/gounchoi/Desktop/IITP_agIoT/node3/MQTT_data_store_module/test.txt", 'w')
+        f = open("/home/pi/output_mqtt.txt", 'w')
         f.close()
 
         lines = s.splitlines()
