@@ -60,14 +60,14 @@ void loop()
     String data = "";
     count++;
   
-    data = data + "##"+(String)count;
+    data = data + "##";
     data = data + (String)DHT.temperature;
     data = data + "!" + (String)DHT.humidity;
     data = data + "!"+(String)analogRead(vh400_apin);
     Serial.println("test : " + (String)count);
     Serial.println("temperature : " + (String)DHT.temperature);
     Serial.println("humidity : " + (String)DHT.humidity);
-    Serial.println("test : " + (String)analogRead(vh400_apin);
+    Serial.println("test : " + (String)analogRead(vh400_apin));
     
     aprs_send(data);
     next_aprs += APRS_PERIOD * 1000L;
