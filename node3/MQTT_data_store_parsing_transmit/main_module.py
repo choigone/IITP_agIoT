@@ -21,7 +21,7 @@ def func(second = 1.0):
                 datas = lines[-1].split("!")[1]
                 print(datas)
                 ser = serial.Serial('/dev/ttyUSB1', 9600)
-                if datas < 200:
+                if datas*1 < 200:
                         ser.write('1')
                         print("1")
                 else:
