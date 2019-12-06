@@ -52,20 +52,23 @@ void setup()
 }
 
 void loop()
-{
-  DHT.read11(dht_apin);
-  
-  String data = "";
-  count++;
-  
-  data = data + "test"+(String)count + ", ";
-  data = data + "temperature : " + (String)DHT.temperature + ", ";
-  data = data + "humidity : " + (String)DHT.humidity + ", ";
-  data = data + "soil :"+(String)analogRead(vh400_apin) + ", ";
-  Serial.println(data);
-      
+{     
   // Time for another APRS frame
   if ((int32_t) (millis() - next_aprs) >= 0) {
+    DHT.read11(dht_apin);
+  
+    String data = "";
+    count++;
+  
+    data = data + "##"+(String)count;
+    data = data + (String)DHT.temperature;
+    data = data + "!" + (String)DHT.humidity;
+    data = data + "!"+(String)analogRead(vh400_apin);
+    Serial.println("test : " + (String)count);
+    Serial.println("temperature : " + (String)DHT.temperature);
+    Serial.println("humidity : " + (String)DHT.humidity);
+    Serial.println("test : " + (String)analogRead(vh400_apin);
+    
     aprs_send(data);
     next_aprs += APRS_PERIOD * 1000L;
     while (afsk_flush()) {
