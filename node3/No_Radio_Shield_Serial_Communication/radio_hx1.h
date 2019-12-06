@@ -15,42 +15,16 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Trackuino custom libs
-#include "config.h"
-#include "afsk_avr.h"
-#include "aprs.h"
-#include "pin.h"
-#include "power.h"
-#include <Arduino.h>
+#ifndef __RADIO_HX1_H__
+#define __RADIO_HX1_H__
 
-// Module variables
-static int32_t next_aprs = 3000;
+#include "radio.h"
 
+class RadioHx1 : public Radio {
+  public:
+    virtual void setup();
+    virtual void ptt_on();
+    virtual void ptt_off();
+};
 
-void setup()
-{
-  Serial.begin(9600);
-  afsk_setup();
-
-}
-int count = 0;
-void loop()
-{
-  if(Serial.available()){
-    int r = 1;
-    r = Serial.read() - '0';
-    if ((int32_t) (millis() - next_aprs) >= 0) {
-      aprs_send("##" + String(r));
-      next_aprs += APRS_PERIOD * 1000L;
-      while (afsk_flush()) {
-        power_save();
-      }
-    } else {
-      // Discard GPS data received during sleep window
-      while (Serial.available()) {
-        Serial.read();
-      }
-    }
-  }
-  power_save(); // Incoming GPS data or interrupts will wake us up
-}
+#endif

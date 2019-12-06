@@ -15,42 +15,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Trackuino custom libs
 #include "config.h"
-#include "afsk_avr.h"
-#include "aprs.h"
+#include "radio_hx1.h"
 #include "pin.h"
-#include "power.h"
-#include <Arduino.h>
+#if (ARDUINO + 1) >= 100
+#  include <Arduino.h>
+#else
+#  include <WProgram.h>
+#endif
 
-// Module variables
-static int32_t next_aprs = 3000;
 
-
-void setup()
+void RadioHx1::setup()
 {
-  Serial.begin(9600);
-  afsk_setup();
-
+  // Configure pins
+  pinMode(PTT_PIN, OUTPUT);
+  pin_write(PTT_PIN, LOW);
+  pinMode(AUDIO_PIN, OUTPUT);
 }
-int count = 0;
-void loop()
+
+void RadioHx1::ptt_on()
 {
-  if(Serial.available()){
-    int r = 1;
-    r = Serial.read() - '0';
-    if ((int32_t) (millis() - next_aprs) >= 0) {
-      aprs_send("##" + String(r));
-      next_aprs += APRS_PERIOD * 1000L;
-      while (afsk_flush()) {
-        power_save();
-      }
-    } else {
-      // Discard GPS data received during sleep window
-      while (Serial.available()) {
-        Serial.read();
-      }
-    }
-  }
-  power_save(); // Incoming GPS data or interrupts will wake us up
+  pin_write(PTT_PIN, HIGH);
+  delay(25);   // The HX1 takes 5 ms from PTT to full RF, give it 25
+}
+
+void RadioHx1::ptt_off()
+{
+  pin_write(PTT_PIN, LOW);
 }

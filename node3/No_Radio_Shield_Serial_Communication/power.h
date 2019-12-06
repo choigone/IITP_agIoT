@@ -14,43 +14,10 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
+#ifndef __POWER_H__
+#define __POWER_H__
 
-// Trackuino custom libs
-#include "config.h"
-#include "afsk_avr.h"
-#include "aprs.h"
-#include "pin.h"
-#include "power.h"
-#include <Arduino.h>
+void power_save();
 
-// Module variables
-static int32_t next_aprs = 3000;
+#endif // ifndef __POWER_H__
 
-
-void setup()
-{
-  Serial.begin(9600);
-  afsk_setup();
-
-}
-int count = 0;
-void loop()
-{
-  if(Serial.available()){
-    int r = 1;
-    r = Serial.read() - '0';
-    if ((int32_t) (millis() - next_aprs) >= 0) {
-      aprs_send("##" + String(r));
-      next_aprs += APRS_PERIOD * 1000L;
-      while (afsk_flush()) {
-        power_save();
-      }
-    } else {
-      // Discard GPS data received during sleep window
-      while (Serial.available()) {
-        Serial.read();
-      }
-    }
-  }
-  power_save(); // Incoming GPS data or interrupts will wake us up
-}

@@ -15,42 +15,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Trackuino custom libs
-#include "config.h"
-#include "afsk_avr.h"
-#include "aprs.h"
-#include "pin.h"
-#include "power.h"
-#include <Arduino.h>
+#ifndef __GPS_H__
+#define __GPS_H__
 
-// Module variables
-static int32_t next_aprs = 3000;
+#include <stdint.h>
 
+extern char gps_time[7];       // HHMMSS
+extern uint32_t gps_seconds;   // seconds after midnight
+extern char gps_date[7];       // DDMMYY
+extern float gps_lat;
+extern float gps_lon;
+extern char gps_aprs_lat[9];
+extern char gps_aprs_lon[10];
+extern float gps_course;
+extern float gps_speed;
+extern float gps_altitude;
 
-void setup()
-{
-  Serial.begin(9600);
-  afsk_setup();
+void gps_setup();
+bool gps_decode(char c);
+void gps_reset_parser();
 
-}
-int count = 0;
-void loop()
-{
-  if(Serial.available()){
-    int r = 1;
-    r = Serial.read() - '0';
-    if ((int32_t) (millis() - next_aprs) >= 0) {
-      aprs_send("##" + String(r));
-      next_aprs += APRS_PERIOD * 1000L;
-      while (afsk_flush()) {
-        power_save();
-      }
-    } else {
-      // Discard GPS data received during sleep window
-      while (Serial.available()) {
-        Serial.read();
-      }
-    }
-  }
-  power_save(); // Incoming GPS data or interrupts will wake us up
-}
+#endif

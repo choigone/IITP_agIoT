@@ -15,42 +15,40 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Trackuino custom libs
-#include "config.h"
-#include "afsk_avr.h"
-#include "aprs.h"
+#ifdef AVR
+
 #include "pin.h"
-#include "power.h"
-#include <Arduino.h>
+#include <stdint.h>
+#include <pins_arduino.h>
+#if (ARDUINO + 1) >= 100
+#  include <Arduino.h>
+#else
+#  include <WProgram.h>
+#endif
 
-// Module variables
-static int32_t next_aprs = 3000;
-
-
-void setup()
+// This is a digitalWrite() replacement that does not disrupt
+// timer 2.
+void pin_write(uint8_t pin, uint8_t val)
 {
-  Serial.begin(9600);
-  afsk_setup();
+  uint8_t bit = digitalPinToBitMask(pin);
+  uint8_t port = digitalPinToPort(pin);
+  volatile uint8_t *out;
 
-}
-int count = 0;
-void loop()
-{
-  if(Serial.available()){
-    int r = 1;
-    r = Serial.read() - '0';
-    if ((int32_t) (millis() - next_aprs) >= 0) {
-      aprs_send("##" + String(r));
-      next_aprs += APRS_PERIOD * 1000L;
-      while (afsk_flush()) {
-        power_save();
-      }
-    } else {
-      // Discard GPS data received during sleep window
-      while (Serial.available()) {
-        Serial.read();
-      }
-    }
+  if (port == NOT_A_PIN) return;
+
+  out = portOutputRegister(port);
+
+  if (val == LOW) {
+    uint8_t oldSREG = SREG;
+    cli();
+    *out &= ~bit;
+    SREG = oldSREG;
+  } else {
+    uint8_t oldSREG = SREG;
+    cli();
+    *out |= bit;
+    SREG = oldSREG;
   }
-  power_save(); // Incoming GPS data or interrupts will wake us up
 }
+
+#endif  // AVR

@@ -15,42 +15,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-// Trackuino custom libs
-#include "config.h"
-#include "afsk_avr.h"
-#include "aprs.h"
-#include "pin.h"
-#include "power.h"
-#include <Arduino.h>
+#ifndef __AX25_H__
+#define __AX25_H__
 
-// Module variables
-static int32_t next_aprs = 3000;
+struct s_address {
+	char callsign[7];
+	unsigned char ssid;
+};
 
+void ax25_send_header(const struct s_address *addresses, int num_addresses);
+void ax25_send_byte(unsigned char byte);
+void ax25_send_string(const char *string);
+void ax25_send_footer();
+void ax25_flush_frame();
 
-void setup()
-{
-  Serial.begin(9600);
-  afsk_setup();
-
-}
-int count = 0;
-void loop()
-{
-  if(Serial.available()){
-    int r = 1;
-    r = Serial.read() - '0';
-    if ((int32_t) (millis() - next_aprs) >= 0) {
-      aprs_send("##" + String(r));
-      next_aprs += APRS_PERIOD * 1000L;
-      while (afsk_flush()) {
-        power_save();
-      }
-    } else {
-      // Discard GPS data received during sleep window
-      while (Serial.available()) {
-        Serial.read();
-      }
-    }
-  }
-  power_save(); // Incoming GPS data or interrupts will wake us up
-}
+#endif
