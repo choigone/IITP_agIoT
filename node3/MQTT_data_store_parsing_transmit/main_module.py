@@ -18,15 +18,14 @@ def func(second = 1.0):
 
         lines = s.splitlines()
         try:
-                datas = lines[-1].split("!")
+                datas = lines[-1].split("!")[1]
+                ser = serial.Serial('/dev/ttyUSB1', 9600)
+                if datas < 200:
+                        ser.write('1')
+                else:
+                        ser.write('0')
         except:
                 print("exceptions")
-
-        ser = serial.Serial('/dev/ttyUSB1',9600)
-        if datas[-1] < 200 :
-                ser.write('1')
-        else :
-                ser.write('0')
 
         threading.Timer(second, func, [second]).start()
 
