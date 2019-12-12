@@ -22,54 +22,28 @@
 #include "pin.h"
 #include "power.h"
 #include <Arduino.h>
-#include <SoftwareSerial.h>
-#include "dht.h"
 
 // Module variables
-static int32_t next_aprs = 1000;
+static int32_t next_aprs = 3000;
 
-dht DHT;
-#define dht_apin A0 // Analog Pin sensor is connected to
-#define vh400_apin A1 // Analog pin for VH400
-
-// you can change the pin numbers to match your wiring:
-SoftwareSerial mySerial(3, 2);
-
-int highval = 9;
-int count = 0;
 
 void setup()
 {
+  Serial.begin(9600);
   afsk_setup();
 
-  delay(1000);
-  Serial.begin(4800); delay(1000);
-  Serial.println("C"); delay(3);
-  Serial.print("MW1AW\r\n"); delay(10);              //SET YOUR CALLSIGN HERE, HERE YOU SEE W1AW                       
-  Serial.print("PWIDE1-1,WIDE2-1\r\n"); delay(10);   //SET DIGIPATH HERE
-  pinMode(highval, OUTPUT); delay(1000);
-  Serial.begin(115200); delay(3000);
 }
-
+int count = 0;
 void loop()
-{     
-  // Time for another APRS frame
+{
   if ((int32_t) (millis() - next_aprs) >= 0) {
-    DHT.read11(dht_apin);
-  
-    String data = "";
+    // Time for another APRS frame
+    String a = "abc";
+    String b = "cde";
+    String c = a + b + String(count);
     count++;
-  
-    data = data + "##";
-    data = data + (String)DHT.temperature;
-    data = data + "!" + (String)DHT.humidity;
-    data = data + "!"+(String)analogRead(vh400_apin);
-    Serial.println("test : " + (String)count);
-    Serial.println("temperature : " + (String)DHT.temperature);
-    Serial.println("humidity : " + (String)DHT.humidity);
-    Serial.println("test : " + (String)analogRead(vh400_apin));
-    
-    aprs_send(data);
+    count %= 10;
+    aprs_send("##" + c);
     next_aprs += APRS_PERIOD * 1000L;
     while (afsk_flush()) {
       power_save();
@@ -81,6 +55,6 @@ void loop()
       Serial.read();
     }
   }
-  
+
   power_save(); // Incoming GPS data or interrupts will wake us up
 }
